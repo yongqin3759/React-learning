@@ -1,0 +1,19 @@
+.InGarage{
+  display: flex;
+  flex-wrap: wrap;
+  width: 1200px;
+  flex-direction: row;
+}
+
+.AlertHide{
+  display: none;
+}
+.AlertDisplay{
+  display: block;
+  color: blue;
+  font-size: 60px;
+  position: absolute;
+  left: 0;
+  top: 270px;
+  transform: rotate(20deg);
+}
