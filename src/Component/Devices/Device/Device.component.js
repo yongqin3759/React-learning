@@ -3,6 +3,7 @@ import classes from './Device.module.css'
 
 const device = (props) => {
   let move = props.isCheckedOut ? 'Store': 'Checkout'
+
   return (
       <div className={classes.Container}>
       <div className={classes.DeviceComponent}>
@@ -14,6 +15,7 @@ const device = (props) => {
       <input className={classes.Device} value = {props.lastCheckedOutDate}/>
       <button onClick ={props.move}>{move}</button>
       <button onClick = {props.delete}>Delete</button>
+      <button onClick = {props.edit}>Edit</button>
       </div>
       </div>
       )

@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
-import Device from './Component/Device.component'
+import Device from './Component/Devices/Device/Device.component'
 import classes from './App.module.css'
+import SavedDevices from './Component/SavedDevices/SavedDevice.component'
 
 class App extends Component{
   state = {
@@ -118,7 +119,7 @@ class App extends Component{
 
 
   moveDevice = (deviceIndex) =>{
-    console.log('1. '+ this.countGarageDevices())
+    // console.log('1. '+ this.countGarageDevices())
     let moveDevices = [...this.state.devices];
     moveDevices[deviceIndex].isCheckedOut = !moveDevices[deviceIndex].isCheckedOut
     // why is this code nessecary?
@@ -128,11 +129,11 @@ class App extends Component{
     }
     // why dis code ^^^^^^^^^
     
-    console.log('2. '+ this.countGarageDevices())
+    // console.log('2. '+ this.countGarageDevices())
     if(this.countGarageDevices() <= 10){
     this.setState({devices: moveDevices}, () => {
     this.countGarageDevices()
-    console.log('3. '+ this.countGarageDevices())
+    // console.log('3. '+ this.countGarageDevices())
     })
     }
   }
@@ -141,6 +142,24 @@ class App extends Component{
     const devices = [...this.state.devices];
     devices.splice(deviceIndex,1)
     this.setState({devices: devices})
+  }
+
+  saveDevice = ()=>{
+    const devices = [...this.state.devices];
+    let addDevice = document.getElementById('add-device')
+    console.log(addDevice)
+    let newDevice = {
+      "id": addDevice.children[0].value,
+      "device": addDevice.children[1].value,
+      "os": addDevice.children[2].value,
+      "manufacturer": addDevice.children[3].value,
+      "lastCheckedOutBy": addDevice.children[4].value,
+      "lastCheckedOutDate": addDevice.children[5].value,
+      "isCheckedOut": true
+    }
+    devices.push(newDevice);
+    this.setState({devices: devices})
+    console.log(this.props)
   }
   render (){
     let garageDevices = null
@@ -203,7 +222,19 @@ class App extends Component{
         <div className="notInGarage"> <h2>Has been Checked out</h2>
         {checkoutDevices}
         </div>
-      
+        <div className="add-device">
+        <h1>Add Device to Checkout</h1>
+        <SavedDevices
+        className={classes.InGarage}
+        id = {null}
+        device = {null}
+        os= {null}
+        manufacturer= {null}
+        lastCheckedOutDate= {null}
+        lastCheckedOutBy= {null}
+        save = {()=>this.saveDevice()}
+        />
+        </div>
       </div>
       )
   }
