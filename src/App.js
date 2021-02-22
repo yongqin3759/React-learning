@@ -12,7 +12,8 @@ class App extends Component{
     "manufacturer": "Motorola",
     "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
     "lastCheckedOutBy": "Chris Evans",
-    "isCheckedOut": false
+    "isCheckedOut": false,
+    edit: false
     },
     {
       "id": 2,
@@ -21,7 +22,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
       },
     {
       "id": 3,
@@ -30,7 +32,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 4,
@@ -39,7 +42,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 5,
@@ -48,7 +52,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 6,
@@ -57,7 +62,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 7,
@@ -66,7 +72,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 8,
@@ -75,7 +82,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 9,
@@ -84,7 +92,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": false
+      "isCheckedOut": false,
+      edit: false
     },
     {
       "id": 10,
@@ -93,7 +102,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": true
+      "isCheckedOut": true,
+      edit: false
     },
     {
       "id": 11,
@@ -102,7 +112,8 @@ class App extends Component{
       "manufacturer": "Motorola",
       "lastCheckedOutDate": "2016-02-21T09:10:00-05:00",
       "lastCheckedOutBy": "Chris Evans",
-      "isCheckedOut": true
+      "isCheckedOut": true,
+      edit: false
     },
     ]
 
@@ -155,12 +166,28 @@ class App extends Component{
       "manufacturer": addDevice.children[3].value,
       "lastCheckedOutBy": addDevice.children[4].value,
       "lastCheckedOutDate": addDevice.children[5].value,
-      "isCheckedOut": true
+      "isCheckedOut": true,
+      edit: false
     }
     devices.push(newDevice);
     this.setState({devices: devices})
     console.log(this.props)
   }
+
+  editDevice =(index)=>{
+    const devices = [...this.state.devices];
+    devices[index].edit = true
+    }
+
+  handleInputChange=(e,index) =>{
+    const devices = [...this.state.devices];
+    devices[index][e.target.name] = e.target.value
+    console.log(e.target.name)
+    this.setState({
+      devices: devices
+    });
+  }
+
   render (){
     let garageDevices = null
     let checkoutDevices = null
@@ -181,6 +208,7 @@ class App extends Component{
           isCheckedOut = {this.state.devices[index].isCheckedOut}
           move = {()=>this.moveDevice(index)}
           delete ={()=>this.removeDevice(index)}
+          change ={(e)=>this.handleInputChange(e,index)}
           >
           </Device>
           </div>)
@@ -203,6 +231,7 @@ class App extends Component{
           isCheckedOut = {this.state.devices[index].isCheckedOut}
           move = {()=>this.moveDevice(index)}
           delete ={()=>this.removeDevice(index)}
+          change ={(e)=>this.handleInputChange(e,index)}
           />)
         }
         })}
