@@ -176,17 +176,23 @@ class App extends Component{
 
   editDevice =(index)=>{
     const devices = [...this.state.devices];
-    devices[index].edit = true
+    devices[index].edit = !devices[index].edit
+    this.setState({
+      devices: devices
+    });
     }
 
   handleInputChange=(e,index) =>{
     const devices = [...this.state.devices];
+    if(devices[index].edit==true){
     devices[index][e.target.name] = e.target.value
     console.log(e.target.name)
-    this.setState({
-      devices: devices
-    });
   }
+  this.setState({
+    devices: devices
+  })
+  }
+
 
   render (){
     let garageDevices = null
@@ -209,6 +215,7 @@ class App extends Component{
           move = {()=>this.moveDevice(index)}
           delete ={()=>this.removeDevice(index)}
           change ={(e)=>this.handleInputChange(e,index)}
+          edit={()=>this.editDevice(index)}
           >
           </Device>
           </div>)
