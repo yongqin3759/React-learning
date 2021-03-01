@@ -1,0 +1,21 @@
+.DeviceComponent{
+    display: flex;
+    padding: 20px;
+    margin: 10px;
+    margin-bottom: 10px;
+    width: 160px;
+    flex-wrap: wrap;
+    background-color: black;
+    border-radius:20px;
+}
+.Device{
+    display: block;
+    width: 70px;
+    height: 50px;
+    background-color: lightgray;
+    text-align: center;
+    border: 3px black solid ;
+}
+.Container{
+    display: flex;
+}

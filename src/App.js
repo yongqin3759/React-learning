@@ -2,6 +2,8 @@ import React, { Component, useState } from 'react';
 import Device from './Component/Devices/Device/Device.component'
 import classes from './App.module.css'
 import SavedDevices from './Component/SavedDevices/SavedDevice.component'
+import {GarageDevices} from './Component/GarageDevices/GarageDevices.component'
+import {CheckedOutDevices} from './Component/CheckedOutDevices/CheckedOutDevices.component'
 
 class App extends Component{
   state = {
@@ -130,42 +132,35 @@ class App extends Component{
 
 
   moveDevice = (deviceIndex) =>{
-    // console.log('1. '+ this.countGarageDevices())
     let moveDevices = [...this.state.devices];
     moveDevices[deviceIndex].isCheckedOut = !moveDevices[deviceIndex].isCheckedOut
-    // why is this code nessecary?
     if(this.countGarageDevices()>10){
     moveDevices[deviceIndex].isCheckedOut = !moveDevices[deviceIndex].isCheckedOut
     return
     }
-    // why dis code ^^^^^^^^^
-    
-    // console.log('2. '+ this.countGarageDevices())
     if(this.countGarageDevices() <= 10){
     this.setState({devices: moveDevices}, () => {
     this.countGarageDevices()
-    // console.log('3. '+ this.countGarageDevices())
     })
     }
   }
 
   removeDevice = (deviceIndex) => {
-    const devices = [...this.state.devices];
-    devices.splice(deviceIndex,1)
+    let devices = this.state.devices.filter((device)=>{
+      return(device != this.state.devices[deviceIndex])
+    })
     this.setState({devices: devices})
   }
 
-  saveDevice = ()=>{
+  saveDevice = (savedDeviceContainer)=>{
     const devices = [...this.state.devices];
-    let addDevice = document.getElementById('add-device')
-    console.log(addDevice)
     let newDevice = {
-      "id": addDevice.children[0].value,
-      "device": addDevice.children[1].value,
-      "os": addDevice.children[2].value,
-      "manufacturer": addDevice.children[3].value,
-      "lastCheckedOutBy": addDevice.children[4].value,
-      "lastCheckedOutDate": addDevice.children[5].value,
+      "id": savedDeviceContainer.children[0].value,
+      "device": savedDeviceContainer.children[1].value,
+      "os": savedDeviceContainer.children[2].value,
+      "manufacturer": savedDeviceContainer.children[3].value,
+      "lastCheckedOutBy": savedDeviceContainer.children[4].value,
+      "lastCheckedOutDate": savedDeviceContainer.children[5].value,
       "isCheckedOut": true,
       edit: false
     }
@@ -191,66 +186,33 @@ class App extends Component{
   this.setState({
     devices: devices
   })
-  }
+  } 
 
 
   render (){
-    let garageDevices = null
-    let checkoutDevices = null
-    let maxStorage = null;
+    const garageDevices = <GarageDevices
+                            devices = {this.state.devices}
+                            move = {(index)=>this.moveDevice(index)}
+                            delete ={(index)=>this.removeDevice(index)}
+                            change ={(e,index)=>this.handleInputChange(e,index)}
+                            edit={(index)=>this.editDevice(index)}/>
+
+    const checkoutDevices = <div className={classes.InGarage}><CheckedOutDevices
+                              devices = {this.state.devices}
+                              move = {(index)=>this.moveDevice(index)}
+                              delete ={(index)=>this.removeDevice(index)}
+                              change ={(e,index)=>this.handleInputChange(e,index)}
+                              edit={(index)=>this.editDevice(index)}/>
+                              </div>
     
-    garageDevices = (<div className={classes.InGarage}>
-        {this.state.devices.map((device,index) =>{
-          if(!this.state.devices[index].isCheckedOut){
-          return (
-          <div><Device
-          className={classes.InGarage}
-          id={this.state.devices[index].id}
-          device={this.state.devices[index].device}
-          os={this.state.devices[index].os}
-          manufacturer={this.state.devices[index].manufacturer}
-          lastCheckedOutDate={this.state.devices[index].lastCheckedOutDate}
-          lastCheckedOutBy={this.state.devices[index].lastCheckedOutBy}
-          isCheckedOut = {this.state.devices[index].isCheckedOut}
-          move = {()=>this.moveDevice(index)}
-          delete ={()=>this.removeDevice(index)}
-          change ={(e)=>this.handleInputChange(e,index)}
-          edit={()=>this.editDevice(index)}
-          >
-          </Device>
-          </div>)
-        }
-        })}
-        </div>)
-
-  
-    checkoutDevices = (<div className={classes.InGarage}>
-        {this.state.devices.map((device,index) =>{
-          if(this.state.devices[index].isCheckedOut){
-          return (<Device
-          className={classes.InGarage}
-          id={this.state.devices[index].id}
-          device={this.state.devices[index].device}
-          os={this.state.devices[index].os}
-          manufacturer={this.state.devices[index].manufacturer}
-          lastCheckedOutDate={this.state.devices[index].lastCheckedOutDate}
-          lastCheckedOutBy={this.state.devices[index].lastCheckedOutBy}
-          isCheckedOut = {this.state.devices[index].isCheckedOut}
-          move = {()=>this.moveDevice(index)}
-          delete ={()=>this.removeDevice(index)}
-          change ={(e)=>this.handleInputChange(e,index)}
-          />)
-        }
-        })}
-        </div>)
-
+    let storageCapacityReached;
     if(this.countGarageDevices()==10){
-      maxStorage = (<h1 className={classes.AlertDisplay}>Maximum Storage Capacity Reached!</h1>)      
+      storageCapacityReached = (<h1 className={`${classes.unselectable} ${classes.AlertDisplay}`}>Maximum Storage Capacity Reached!</h1>)      
     }
 
     return (
       <div>
-        {maxStorage}
+        {storageCapacityReached}
         <h1>In Garage</h1>
         <div className={classes.InGarage}> 
         {garageDevices}
@@ -268,7 +230,7 @@ class App extends Component{
         manufacturer= {null}
         lastCheckedOutDate= {null}
         lastCheckedOutBy= {null}
-        save = {()=>this.saveDevice()}
+        save = {(e)=>this.saveDevice(e.target.parentElement)}
         />
         </div>
       </div>
